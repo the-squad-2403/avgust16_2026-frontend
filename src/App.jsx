@@ -5,6 +5,11 @@ import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import NotFound from './pages/NotFound.jsx';
+import Onboarding from './pages/Onboarding.jsx';
+import DialogLesson from './pages/DialogLesson.jsx';
+import Duel from './pages/Duel.jsx';
+import Leaderboard from './pages/Leaderboard.jsx';
+import Profile from './pages/Profile.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 const App = () => {
@@ -32,6 +37,46 @@ const App = () => {
         element={
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/onboarding"
+        element={
+          <ProtectedRoute>
+            <Onboarding />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/lesson/:id"
+        element={
+          <ProtectedRoute>
+            <DialogLesson />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/duel"
+        element={
+          <ProtectedRoute>
+            <Duel />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/leaderboard"
+        element={
+          <ProtectedRoute>
+            <Leaderboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
           </ProtectedRoute>
         }
       />

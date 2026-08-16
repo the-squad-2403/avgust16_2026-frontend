@@ -2,6 +2,7 @@ import { useAuth } from '../context/AuthContext.jsx';
 import { useLanguage } from '../context/LanguageContext.jsx';
 import DashboardLayout from '../components/DashboardLayout.jsx';
 
+// TODO: will be extended with streak/XP/skill-path by frontend-dev1
 const Dashboard = () => {
   const { user } = useAuth();
   const { t } = useLanguage();
