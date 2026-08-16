@@ -1,37 +1,46 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from './context/AuthContext.jsx';
-import { useLanguage } from './context/LanguageContext.jsx';
-import Login from './pages/Login.jsx';
-import Register from './pages/Register.jsx';
-import Dashboard from './pages/Dashboard.jsx';
-import NotFound from './pages/NotFound.jsx';
-import Onboarding from './pages/Onboarding.jsx';
-import DialogLesson from './pages/DialogLesson.jsx';
-import Duel from './pages/Duel.jsx';
-import Leaderboard from './pages/Leaderboard.jsx';
-import Profile from './pages/Profile.jsx';
-import ProtectedRoute from './components/ProtectedRoute.jsx';
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-const App = () => {
-  const { user, loading } = useAuth();
-  const { t } = useLanguage();
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Onboarding from "./pages/Onboarding";
+import Dashboard from "./pages/Dashboard";
+import LessonRouter from "./components/LessonRouter";
+import LessonComplete from "./pages/LessonComplete";
+import Duel from "./pages/Duel";
+import Leaderboard from "./pages/Leaderboard";
+import Profile from "./pages/Profile";
+import NotFound from "./pages/NotFound";
 
+function RootRedirect() {
+  const { isAuthenticated, user, loading } = useAuth();
+  if (loading) return null;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (!user?.onboardingCompleted) return <Navigate to="/onboarding" replace />;
+  return <Navigate to="/dashboard" replace />;
+}
+
+export default function App() {
+  // BrowserRouter va AuthProvider main.jsx'da allaqachon o'ralgan —
+  // shu yerda faqat Routes/Route'lar beriladi, boshqa Provider qo'shilmaydi.
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          loading ? (
-            <div className="flex items-center justify-center min-h-screen text-gray-500">
-              {t('loading')}
-            </div>
-          ) : (
-            <Navigate to={user ? '/dashboard' : '/login'} replace />
-          )
-        }
-      />
+      {/* Ochiq sahifalar */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+
+      {/* Onboarding — login qilingan, lekin alohida layout'siz */}
+      <Route
+        path="/onboarding"
+        element={
+          <ProtectedRoute>
+            <Onboarding />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Himoyalangan ichki sahifalar */}
       <Route
         path="/dashboard"
         element={
@@ -41,18 +50,18 @@ const App = () => {
         }
       />
       <Route
-        path="/onboarding"
+        path="/lesson/:lessonId"
         element={
           <ProtectedRoute>
-            <Onboarding />
+            <LessonRouter />
           </ProtectedRoute>
         }
       />
       <Route
-        path="/lesson/:id"
+        path="/lesson-complete"
         element={
           <ProtectedRoute>
-            <DialogLesson />
+            <LessonComplete />
           </ProtectedRoute>
         }
       />
@@ -80,9 +89,9 @@ const App = () => {
           </ProtectedRoute>
         }
       />
+
+      <Route path="/" element={<RootRedirect />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
-};
-
-export default App;
+}

@@ -1,21 +1,18 @@
-import { Link } from 'react-router-dom';
-import { useLanguage } from '../context/LanguageContext.jsx';
+import { Link } from "react-router-dom";
 
-const NotFound = () => {
-  const { t } = useLanguage();
-
+export default function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4 text-center">
-      <h1 className="text-5xl font-bold text-gray-900 mb-4">404</h1>
-      <p className="text-gray-600 mb-6">{t('notFoundMessage')}</p>
-      <Link
-        to="/"
-        className="bg-indigo-600 text-white px-4 py-2 rounded-md font-medium hover:bg-indigo-500 transition"
-      >
-        {t('goHome')}
+    <div className="min-h-screen flex flex-col items-center justify-center bg-base-100 px-6 text-center">
+      <p className="text-6xl mb-4">🦊</p>
+      <h1 className="text-xl font-bold text-base-content mb-1">
+        Sahifa topilmadi
+      </h1>
+      <p className="text-sm text-neutral mb-6">
+        Siz izlayotgan sahifa mavjud emas.
+      </p>
+      <Link to="/dashboard" className="tt-btn-primary max-w-xs">
+        Bosh sahifaga qaytish
       </Link>
     </div>
   );
-};
-
-export default NotFound;
+}

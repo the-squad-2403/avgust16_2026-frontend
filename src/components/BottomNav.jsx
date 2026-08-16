@@ -1,24 +1,45 @@
-// TODO: wire up active-state highlighting (NavLink) and mobile-only visibility;
-// currently just renders the four nav targets so it's visible during layout work.
+import { NavLink } from "react-router-dom";
+import { Home, Swords, Trophy, User } from "lucide-react";
 
-const items = [
-  { label: 'Home', path: '/dashboard' },
-  { label: 'Duel', path: '/duel' },
-  { label: 'Leaderboard', path: '/leaderboard' },
-  { label: 'Profile', path: '/profile' },
+const NAV_ITEMS = [
+  { to: "/dashboard", label: "Home", icon: Home },
+  { to: "/duel", label: "Duel", icon: Swords },
+  { to: "/leaderboard", label: "League", icon: Trophy },
+  { to: "/profile", label: "Profile", icon: User },
 ];
 
-const BottomNav = () => {
+export default function BottomNav() {
   return (
-    <nav className="fixed bottom-0 inset-x-0 h-16 bg-white border-t border-gray-200 flex items-center justify-around">
-      {items.map((item) => (
-        <div key={item.path} className="flex flex-col items-center text-xs text-gray-500">
-          <div className="w-5 h-5 rounded-sm bg-gray-200 mb-1" />
-          {item.label}
-        </div>
+    <nav
+      className="lg:hidden fixed bottom-0 left-0 right-0 bg-base-200 border-t border-base-300
+                 px-4 py-2 flex items-center justify-between z-30"
+    >
+      {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
+        <NavLink
+          key={to}
+          to={to}
+          className="flex-1 flex flex-col items-center py-1"
+        >
+          {({ isActive }) => (
+            <>
+              <div className={isActive ? "tt-nav-pill-active" : "px-3 py-1"}>
+                <Icon
+                  size={20}
+                  strokeWidth={2.2}
+                  className={isActive ? "text-secondary" : "text-neutral"}
+                />
+              </div>
+              <span
+                className={`text-[10px] mt-0.5 font-medium ${
+                  isActive ? "text-secondary" : "text-neutral"
+                }`}
+              >
+                {label}
+              </span>
+            </>
+          )}
+        </NavLink>
       ))}
     </nav>
   );
-};
-
-export default BottomNav;
+}

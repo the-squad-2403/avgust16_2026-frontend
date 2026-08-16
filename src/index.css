@@ -1,1 +1,91 @@
 @import "tailwindcss";
+
+@plugin "daisyui" {
+  themes: false;
+}
+
+@plugin "daisyui/theme" {
+  name: "tripletalk";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  /* Backgrounds */
+  --color-base-100: #FAF9F5;   /* iliq krem fon */
+  --color-base-200: #FFFFFF;   /* kartalar */
+  --color-base-300: #E5E7EB;   /* input/border chiziqlar */
+  --color-base-content: #1E293B; /* asosiy matn */
+
+  /* Brand ranglar (skrinshotlardan olingan) */
+  --color-primary: #2563EB;         /* logo, asosiy tugmalar, skill-path */
+  --color-primary-content: #FFFFFF;
+  --color-secondary: #10B981;       /* streak progress, aniqlik, faol nav */
+  --color-secondary-content: #FFFFFF;
+  --color-accent: #F97316;          /* flame, XP belgisi */
+  --color-accent-content: #FFFFFF;
+  --color-neutral: #6B7280;         /* subtitle/translation matni */
+  --color-neutral-content: #FFFFFF;
+
+  --color-info: #3B82F6;
+  --color-success: #22C55E;
+  --color-warning: #FB923C;
+  --color-error: #EF4444;
+
+  /* Radius va o'lchamlar — skrinshotlardagi yumshoq burchaklarga mos */
+  --radius-selector: 1rem;
+  --radius-field: 0.875rem;
+  --radius-box: 1.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+body {
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-base-100);
+  color: var(--color-base-content);
+}
+
+/* ---- Umumiy komponent utilitylar (barcha sahifalar shulardan foydalanadi) ---- */
+
+@layer components {
+  /* Yumshoq soyali oq karta — skrinshotlardagi barcha kartalar shu uslubda */
+  .tt-card {
+    @apply bg-base-200 rounded-3xl shadow-[0_2px_12px_rgba(0,0,0,0.06)] p-5;
+  }
+
+  /* Pill-shakldagi belgi (streak, coin, league badge) */
+  .tt-pill {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold;
+  }
+  .tt-pill-streak { @apply bg-orange-50 text-orange-600; }
+  .tt-pill-coin { @apply bg-blue-50 text-primary; }
+  .tt-pill-league { @apply bg-amber-50 text-amber-600; }
+
+  /* Asosiy to'liq-kenglikdagi tugma */
+  .tt-btn-primary {
+    @apply w-full bg-primary text-primary-content font-semibold py-3.5 rounded-2xl
+           transition active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+
+  /* Ikkilamchi/variant tugmasi (savol javob varianti) */
+  .tt-btn-option {
+    @apply w-full text-left bg-base-200 border border-base-300 rounded-2xl px-4 py-3.5
+           transition hover:border-primary/40 active:scale-[0.99];
+  }
+  .tt-btn-option-selected {
+    @apply border-primary bg-blue-50/60;
+  }
+
+  /* Bottom nav faol tab (pill fon bilan) */
+  .tt-nav-pill-active {
+    @apply bg-secondary/15 text-secondary rounded-full px-3 py-1;
+  }
+
+  /* Skill-path circle node */
+  .tt-path-node {
+    @apply w-14 h-14 rounded-full flex items-center justify-center shadow-md;
+  }
+}
