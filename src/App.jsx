@@ -2,8 +2,6 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-import Login from "./pages/Login";
-import Register from "./pages/Register";
 import Onboarding from "./pages/Onboarding";
 import Dashboard from "./pages/Dashboard";
 import LessonRouter from "./components/LessonRouter";
@@ -16,7 +14,13 @@ import NotFound from "./pages/NotFound";
 function RootRedirect() {
   const { isAuthenticated, user, loading } = useAuth();
   if (loading) return null;
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-neutral text-sm text-center px-6">
+        Ulanishda xatolik yuz berdi. Sahifani yangilang.
+      </div>
+    );
+  }
   if (!user?.onboardingCompleted) return <Navigate to="/onboarding" replace />;
   return <Navigate to="/dashboard" replace />;
 }
@@ -26,11 +30,7 @@ export default function App() {
   // shu yerda faqat Routes/Route'lar beriladi, boshqa Provider qo'shilmaydi.
   return (
     <Routes>
-      {/* Ochiq sahifalar */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-
-      {/* Onboarding — login qilingan, lekin alohida layout'siz */}
+      {/* Onboarding — mehmon hisobi avtomatik yaratiladi, alohida layout'siz */}
       <Route
         path="/onboarding"
         element={

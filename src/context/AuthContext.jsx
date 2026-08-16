@@ -10,11 +10,13 @@ export function AuthProvider({ children }) {
   });
   const [loading, setLoading] = useState(true);
 
-  // Ilova ochilganda tokenni tekshirib, real user ma'lumotini yangilash
+  // Ilova ochilganda tokenni tekshirib, real user ma'lumotini yangilash.
+  // Token bo'lmasa — login/register skip qilinib, shu brauzer uchun mehmon
+  // hisobi avtomatik yaratiladi/kirtiladi.
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      setLoading(false);
+      bootstrapGuest().finally(() => setLoading(false));
       return;
     }
 
@@ -28,10 +30,32 @@ export function AuthProvider({ children }) {
       .catch(() => {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-        setUser(null);
+        return bootstrapGuest();
       })
       .finally(() => setLoading(false));
   }, []);
+
+  function getOrCreateGuestCredentials() {
+    const stored = localStorage.getItem("guestCredentials");
+    if (stored) return JSON.parse(stored);
+    const id = crypto.randomUUID();
+    const creds = { name: "Mehmon", email: `guest-${id}@tripletalk.local`, password: id };
+    localStorage.setItem("guestCredentials", JSON.stringify(creds));
+    return creds;
+  }
+
+  async function bootstrapGuest() {
+    const creds = getOrCreateGuestCredentials();
+    try {
+      await login({ email: creds.email, password: creds.password });
+    } catch {
+      try {
+        await register(creds);
+      } catch (err) {
+        console.error("Mehmon hisobini yaratib bo'lmadi:", err);
+      }
+    }
+  }
 
   async function register(payload) {
     // payload: { name, email, password }
@@ -77,8 +101,9 @@ export function AuthProvider({ children }) {
   function logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("guestCredentials");
     setUser(null);
-    window.location.href = "/login";
+    window.location.href = "/";
   }
 
   const value = {

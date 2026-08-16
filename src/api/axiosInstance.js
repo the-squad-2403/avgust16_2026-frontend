@@ -18,11 +18,12 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      // Login/register skip qilingani uchun 401'da mehmon hisobini tozalab,
+      // bosh sahifaga qaytaramiz — u yerda yangi mehmon hisobi avtomatik yaratiladi
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      if (window.location.pathname !== "/login") {
-        window.location.href = "/login";
-      }
+      localStorage.removeItem("guestCredentials");
+      window.location.href = "/";
     }
     return Promise.reject(error);
   }

@@ -13,7 +13,11 @@ export default function ProtectedRoute({ children }) {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return (
+      <div className="min-h-screen flex items-center justify-center text-neutral text-sm text-center px-6">
+        Ulanishda xatolik yuz berdi. Sahifani yangilang.
+      </div>
+    );
   }
 
   // Onboarding tugallanmagan bo'lsa, to'g'ridan-to'g'ri /dashboard yoki boshqa
